@@ -1,46 +1,38 @@
-import { useCallback, useState } from 'react';
-import { type Stroke } from './components/canvas';
-import Game from './components/game';
-import Home from './components/home';
-import useWebSocket from './hooks/useWebSockets';
+// src/App.tsx
+import React, { useState, useCallback } from 'react'
+import useWebSocket from './hooks/useWebSockets'
+import Home from './components/home'
+import Game from './components/game'
 
 export default function App() {
-  const [word, setWord] = useState<string | null>(null);
-  const [roomId, setRoomId] = useState<string | null>(null);
-  const { strokes, send } = useWebSocket(roomId || '');
+  const [word, setWord] = useState<string | null>(null)
+  const [roomId, setRoomId] = useState<string | null>(null)
+
+  // pull strokes + send() from our hook
+  const { strokes, send } = useWebSocket(roomId ?? '')
 
   const startGame = useCallback((selectedWord: string) => {
-    setWord(selectedWord);
-    setRoomId(crypto.randomUUID());
-  }, []);
+    const newRoomId = crypto.randomUUID()
+    setWord(selectedWord)
+    setRoomId(newRoomId)
+  }, [])
 
   const joinGame = useCallback((id: string) => {
-    setRoomId(id);
-  }, []);
-
-  const handleStroke = useCallback(
-    (stroke: Stroke) => {
-      send(stroke);
-    },
-    [send]
-  );
+    setRoomId(id)
+  }, [])
 
   const resetGame = useCallback(() => {
-    setWord(null);
-    setRoomId(null);
-  }, []);
+    setRoomId(null)
+    setWord(null)
+  }, [])
 
+  // lobby
   if (!roomId) {
-    return <Home onStart={startGame} onJoin={joinGame} />;
+    return <Home onStart={startGame} onJoin={joinGame} />
   }
 
+  // game
   return (
-    <Game
-      roomId={roomId}
-      word={word ?? ''}
-      strokes={strokes}
-      onStroke={handleStroke}
-      onReset={resetGame}
-    />
-  );
+    <Game roomId={roomId} word={word ?? ''} strokes={strokes} onStroke={send} onReset={resetGame} />
+  )
 }
