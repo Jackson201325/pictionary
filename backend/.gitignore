@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.env.*        # any other env files
+
+# SQLite database file
+pictionary.db
+
+# Uvicorn reload files
+*.log
+
+# SQLModel / Alembic migrations (if you’re generating them)
+migrations/
+alembic.ini
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
