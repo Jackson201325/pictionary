@@ -1,11 +1,15 @@
+import os
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from sqlmodel import SQLModel, create_engine, Session, select
 from typing import List
 from collections import defaultdict
 from models import Room, Stroke
+from dotenv import load_dotenv
 
-DATABASE_URL = "sqlite:///./pictionary.db"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL, echo=True)
 
 app = FastAPI()

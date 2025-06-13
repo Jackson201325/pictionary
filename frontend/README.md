@@ -98,3 +98,5 @@ VITE_API_URL=http://localhost:8000`
   - **Commands**:
     - Format code: `bun run format`
     - Lint code: `bun run lint`
+
+- ENV file is need to setup connection since backend is using 8000
