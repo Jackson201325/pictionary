@@ -7,6 +7,6 @@ HTMLCanvasElement.prototype.getContext = function (_: string) {
     beginPath: () => {},
     moveTo: () => {},
     lineTo: () => {},
-    stroke: () => {},
+    stroke: () => {}
   };
 };

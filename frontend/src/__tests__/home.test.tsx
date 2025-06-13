@@ -19,7 +19,7 @@ describe('Home Lobby', () => {
 
   it('can switch to Create mode and fetch a word', async () => {
     global.fetch = vi.fn(() =>
-      Promise.resolve({ json: () => Promise.resolve({ word: 'apple' }) }),
+      Promise.resolve({ json: () => Promise.resolve({ word: 'apple' }) })
     ) as any;
 
     render(<Home onStart={fakeStart} onJoin={fakeJoin} />);

@@ -1,57 +1,38 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { type Stroke } from './components/canvas';
 import Game from './components/game';
 import Home from './components/home';
+import useWebSocket from './hooks/useWebSockets';
 
 export default function App() {
   const [word, setWord] = useState<string | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [strokes, setStrokes] = useState<Stroke[]>([]);
+  const { strokes, send } = useWebSocket(roomId || '');
 
   const startGame = useCallback((selectedWord: string) => {
-    const newRoomId = crypto.randomUUID();
     setWord(selectedWord);
-    setRoomId(newRoomId);
+    setRoomId(crypto.randomUUID());
   }, []);
 
   const joinGame = useCallback((id: string) => {
     setRoomId(id);
   }, []);
 
-  useEffect(() => {
-    if (!roomId) return;
-    const ws = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.type === 'stroke') {
-        setStrokes((prev) => [...prev, data.payload]);
-      }
-    };
-    setSocket(ws);
-    return () => {
-      ws.close();
-      setStrokes([]);
-    };
-  }, [roomId]);
-
   const handleStroke = useCallback(
     (stroke: Stroke) => {
-      setStrokes((prev) => [...prev, stroke]);
-      socket?.send(JSON.stringify({ type: 'stroke', payload: stroke }));
+      send(stroke);
     },
-    [socket],
+    [send]
   );
 
   const resetGame = useCallback(() => {
-    socket?.close();
     setWord(null);
     setRoomId(null);
-    setSocket(null);
-    setStrokes([]);
-  }, [socket]);
+  }, []);
 
-  if (!roomId) return <Home onStart={startGame} onJoin={joinGame} />;
+  if (!roomId) {
+    return <Home onStart={startGame} onJoin={joinGame} />;
+  }
 
   return (
     <Game

@@ -17,8 +17,8 @@ describe('Canvas', () => {
         x0: expect.any(Number),
         y0: expect.any(Number),
         x1: expect.any(Number),
-        y1: expect.any(Number),
-      }),
+        y1: expect.any(Number)
+      })
     );
   });
 });

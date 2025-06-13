@@ -6,7 +6,10 @@ export default function useWebSocket(roomId: string) {
 
   useEffect(() => {
     if (!roomId) return;
-    const ws = new WebSocket(`ws://localhost:8000/ws/${roomId}`);
+
+    const base = import.meta.env.VITE_WS_URL as string;
+    const ws = new WebSocket(`${base}/${roomId}`);
+
     wsRef.current = ws;
 
     ws.onmessage = (event) => {

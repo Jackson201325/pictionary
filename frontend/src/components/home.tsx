@@ -7,13 +7,11 @@ type HomeProps = {
 const Mode = { none: 'none', create: 'create', join: 'join' };
 
 export default function Home({ onStart, onJoin }: HomeProps) {
-  // first select mode, then for create: select word, for join: enter room
   const [mode, setMode] = useState<string>(Mode.none);
   const [word, setWord] = useState<string | null>(null);
   const [joinId, setJoinId] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  // fetch a word for the drawer
   const fetchWord = async () => {
     setError(null);
     try {

@@ -1,7 +1,9 @@
-// src/__tests__/useWebSocket.test.tsx
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useWebSocket from '../hooks/useWebSockets';
+
+// @ts-ignore
+import.meta.env = { VITE_WS_URL: 'ws://test-server/ws' };
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];
@@ -34,7 +36,7 @@ describe('useWebSocket', () => {
 
     act(() => {
       ws.onmessage?.({
-        data: JSON.stringify({ type: 'stroke', payload: { x: 1, y: 2 } }),
+        data: JSON.stringify({ type: 'stroke', payload: { x: 1, y: 2 } })
       });
     });
 
